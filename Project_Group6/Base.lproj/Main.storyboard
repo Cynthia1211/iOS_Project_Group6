@@ -57,10 +57,10 @@
             </objects>
             <point key="canvasLocation" x="143" y="-35"/>
         </scene>
-        <!--View Controller-->
+        <!--New User Controller-->
         <scene sceneID="iOi-ZX-FJT">
             <objects>
-                <viewController id="p3Q-TY-nEn" sceneMemberID="viewController">
+                <viewController id="p3Q-TY-nEn" customClass="NewUserController" customModule="Project_Group6" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vbx-XI-4Fg">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -107,7 +107,7 @@
             </objects>
             <point key="canvasLocation" x="142.74809160305344" y="691.54929577464793"/>
         </scene>
-        <!--Item 2-->
+        <!--My Treasures-->
         <scene sceneID="lFz-mB-yLP">
             <objects>
                 <viewController id="kgO-pV-qNy" customClass="TreasuresController" customModule="Project_Group6" customModuleProvider="target" sceneMemberID="viewController">
@@ -149,16 +149,16 @@
                         <viewLayoutGuide key="safeArea" id="n7Z-Ry-rhx"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 2" id="QNe-lH-UWi"/>
+                    <tabBarItem key="tabBarItem" title="My Treasures" image="mappin" catalog="system" id="QNe-lH-UWi"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ft0-kg-HdP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1717" y="-35"/>
         </scene>
-        <!--View Controller-->
+        <!--New Treasure Controller-->
         <scene sceneID="KYh-OG-wha">
             <objects>
-                <viewController id="lfI-1t-LyO" sceneMemberID="viewController">
+                <viewController id="lfI-1t-LyO" customClass="NewTreasureController" customModule="Project_Group6" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kfC-90-Y6t">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -209,7 +209,7 @@
             </objects>
             <point key="canvasLocation" x="2512" y="43"/>
         </scene>
-        <!--Item 1-->
+        <!--Treasures Around-->
         <scene sceneID="0Gr-B0-Qsz">
             <objects>
                 <viewController id="D27-4R-bcL" customClass="MapController" customModule="Project_Group6" customModuleProvider="target" sceneMemberID="viewController">
@@ -237,7 +237,7 @@
                         <viewLayoutGuide key="safeArea" id="isG-iB-wGE"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 1" id="XAF-MG-j03"/>
+                    <tabBarItem key="tabBarItem" title="Treasures Around" image="map" catalog="system" id="XAF-MG-j03"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w3B-Hu-Dti" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -305,7 +305,7 @@
             </objects>
             <point key="canvasLocation" x="2953.4351145038167" y="-642.95774647887322"/>
         </scene>
-        <!--Item-->
+        <!--Leaderboard-->
         <scene sceneID="6Zx-5q-XgS">
             <objects>
                 <viewController id="Eli-U6-o0j" customClass="LeaderboardController" customModule="Project_Group6" customModuleProvider="target" sceneMemberID="viewController">
@@ -333,13 +333,13 @@
                         <viewLayoutGuide key="safeArea" id="pZo-bb-pfG"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="4rb-Uh-cD6"/>
+                    <tabBarItem key="tabBarItem" title="Leaderboard" image="list.number" catalog="system" id="4rb-Uh-cD6"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KSd-Ia-duj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="910.68702290076328" y="691.54929577464793"/>
         </scene>
-        <!--Item-->
+        <!--Me-->
         <scene sceneID="JXJ-ec-KfM">
             <objects>
                 <viewController id="csM-dQ-7Qx" customClass="ProfileController" customModule="Project_Group6" customModuleProvider="target" sceneMemberID="viewController">
@@ -363,7 +363,7 @@
                         <viewLayoutGuide key="safeArea" id="6rs-jP-prr"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="l7a-h0-Saq"/>
+                    <tabBarItem key="tabBarItem" title="Me" image="person.fill" catalog="system" id="l7a-h0-Saq"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yy4-v5-rej" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -391,6 +391,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="list.number" catalog="system" width="128" height="97"/>
+        <image name="map" catalog="system" width="128" height="112"/>
+        <image name="mappin" catalog="system" width="106" height="128"/>
+        <image name="person.fill" catalog="system" width="128" height="120"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

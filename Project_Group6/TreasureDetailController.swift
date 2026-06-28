@@ -2,7 +2,7 @@
 //  TreasureDetailController.swift
 //  Project_Group6
 //
-//  Created by 张玥 on 2026-06-28.
+//  Created by 
 //
 
 import UIKit

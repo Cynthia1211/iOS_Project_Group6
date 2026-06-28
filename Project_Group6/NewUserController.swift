@@ -1,13 +1,13 @@
 //
-//  NewTreasureController.swift
+//  NewUserController.swift
 //  Project_Group6
 //
-//  Created by 
+//  Created by
 //
 
 import UIKit
 
-class NewTreasureController: UIViewController {
+class NewUserController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

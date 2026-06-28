@@ -13,6 +13,7 @@
 		2445F5712FF15D1B0089E9B5 /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2445F5702FF15D1B0089E9B5 /* ProfileController.swift */; };
 		2445F5732FF15E4D0089E9B5 /* NewTreasureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2445F5722FF15E4D0089E9B5 /* NewTreasureController.swift */; };
 		2445F5752FF1606A0089E9B5 /* TreasureDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2445F5742FF1606A0089E9B5 /* TreasureDetailController.swift */; };
+		246705C02FF17BFC0093039A /* NewUserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246705BF2FF17BFC0093039A /* NewUserController.swift */; };
 		24D4E3F82FF157D500845244 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D4E3F72FF157D500845244 /* AppDelegate.swift */; };
 		24D4E3FA2FF157D500845244 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D4E3F92FF157D500845244 /* SceneDelegate.swift */; };
 		24D4E3FC2FF157D500845244 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D4E3FB2FF157D500845244 /* ViewController.swift */; };
@@ -28,6 +29,7 @@
 		2445F5702FF15D1B0089E9B5 /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
 		2445F5722FF15E4D0089E9B5 /* NewTreasureController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTreasureController.swift; sourceTree = "<group>"; };
 		2445F5742FF1606A0089E9B5 /* TreasureDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureDetailController.swift; sourceTree = "<group>"; };
+		246705BF2FF17BFC0093039A /* NewUserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUserController.swift; sourceTree = "<group>"; };
 		24D4E3F42FF157D500845244 /* Project_Group6.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Project_Group6.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24D4E3F72FF157D500845244 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		24D4E3F92FF157D500845244 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 				24D4E3F92FF157D500845244 /* SceneDelegate.swift */,
 				24D4E3FB2FF157D500845244 /* ViewController.swift */,
 				24D4E3FD2FF157D500845244 /* Main.storyboard */,
+				246705BF2FF17BFC0093039A /* NewUserController.swift */,
 				2445F5742FF1606A0089E9B5 /* TreasureDetailController.swift */,
 				2445F5722FF15E4D0089E9B5 /* NewTreasureController.swift */,
 				2445F5702FF15D1B0089E9B5 /* ProfileController.swift */,
@@ -161,6 +164,7 @@
 				2445F56B2FF15B9F0089E9B5 /* TreasuresController.swift in Sources */,
 				24D4E3F82FF157D500845244 /* AppDelegate.swift in Sources */,
 				2445F56F2FF15CDE0089E9B5 /* LeaderboardController.swift in Sources */,
+				246705C02FF17BFC0093039A /* NewUserController.swift in Sources */,
 				2445F56D2FF15C4A0089E9B5 /* MapController.swift in Sources */,
 				2445F5752FF1606A0089E9B5 /* TreasureDetailController.swift in Sources */,
 				24D4E3FA2FF157D500845244 /* SceneDelegate.swift in Sources */,
