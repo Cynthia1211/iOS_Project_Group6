@@ -1,13 +1,13 @@
 //
-//  TreasureDetailController.swift
+//  MapController.swift
 //  Project_Group6
 //
-//  Created by 
+//  Created by Yue Zhang on 2026-07-05.
 //
 
 import UIKit
 
-class TreasureDetailController: UIViewController {
+class MapViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

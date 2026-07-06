@@ -246,10 +246,10 @@
             </objects>
             <point key="canvasLocation" x="233" y="339"/>
         </scene>
-        <!--New Treasure Controller-->
+        <!--New Treasure View Controller-->
         <scene sceneID="v4j-HD-9Hq">
             <objects>
-                <viewController id="5qP-cC-ctX" customClass="NewTreasureController" customModule="Project_Group6" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="5qP-cC-ctX" customClass="NewTreasureViewController" customModule="Project_Group6" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8Bx-NI-hoi">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -303,7 +303,7 @@
         <!--Treasures Around-->
         <scene sceneID="PwX-Ep-CpN">
             <objects>
-                <viewController id="XKf-pf-pcq" customClass="MapController" customModule="Project_Group6" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="XKf-pf-pcq" customClass="MapViewController" customModule="Project_Group6" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aV2-gO-bYe">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -337,7 +337,7 @@
         <!--My Treasures-->
         <scene sceneID="1B8-GL-cWp">
             <objects>
-                <viewController id="WfY-ZJ-FVQ" customClass="TreasuresController" customModule="Project_Group6" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="WfY-ZJ-FVQ" customClass="TreasuresViewController" customModule="Project_Group6" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ifi-6i-4Zu">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -450,7 +450,7 @@
         <!--Me-->
         <scene sceneID="6QM-wV-Az1">
             <objects>
-                <viewController id="dT8-PD-EeA" customClass="ProfileController" customModule="Project_Group6" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="dT8-PD-EeA" customClass="ProfileViewController" customModule="Project_Group6" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="A7F-Dn-U2l">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -480,7 +480,7 @@
         <!--Leaderboard-->
         <scene sceneID="V7K-fA-2d8">
             <objects>
-                <viewController id="IsM-O6-nz0" customClass="LeaderboardController" customModule="Project_Group6" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="IsM-O6-nz0" customClass="LeaderboardViewController" customModule="Project_Group6" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Eze-wh-kSc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

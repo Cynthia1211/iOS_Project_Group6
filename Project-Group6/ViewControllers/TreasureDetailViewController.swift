@@ -1,13 +1,13 @@
 //
-//  TreasuresController.swift
+//  TreasureDetailController.swift
 //  Project_Group6
 //
-//  Created by 
+//  Created by Yue Zhang
 //
 
 import UIKit
 
-class TreasuresController: UIViewController {
+class TreasureDetailController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -1,5 +1,5 @@
 //
-//  MapController.swift
+//  TreasuresController.swift
 //  Project_Group6
 //
 //  Created by 
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MapViewController: UIViewController {
+class TreasuresViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
