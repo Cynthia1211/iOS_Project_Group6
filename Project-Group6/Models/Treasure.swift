@@ -89,6 +89,22 @@ class Treasure {
                 latitude: 43.4150, longitude: -79.7530,
                 validationCode: "BRONTEWILD", points: 300,
                 isTreasureFound: false, treasurePlaceBy: "Tram"
+            ),
+            Treasure(
+                title: "Celebration Square Zero Point",
+                treasureDescription: "Right at the heart of the square! Look under the main stage steps.",
+                treasureMessage: "Status: Waiting to be found! 👑",
+                latitude: 43.5997071, longitude: -79.6521141,
+                validationCode: "MISSISSAUGA1", points: 500,
+                isTreasureFound: false, treasurePlaceBy: "Yue"
+            ),
+            Treasure(
+                title: "Sheridan Trapper Hideout",
+                treasureDescription: "Hidden exactly at the campus center courtyard grass area.",
+                treasureMessage: "Status: Waiting to be found! 🏫",
+                latitude: 43.4677987, longitude: -79.6998490,
+                validationCode: "SHERIDAN2026", points: 500,
+                isTreasureFound: false, treasurePlaceBy: "Yue"
             )
         ]
     }
