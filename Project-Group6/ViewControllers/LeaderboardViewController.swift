@@ -1,8 +1,8 @@
 //
-//  LeaderboardController.swift
-//  Project_Group6
+//  LeaderboardViewController.swift
+//  Project-Group6
 //
-//  Created by 
+//  Created by
 //
 
 import UIKit

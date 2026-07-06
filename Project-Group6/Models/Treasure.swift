@@ -86,7 +86,7 @@ class Treasure {
                 title: "Bronte Creek Valley Cache",
                 treasureDescription: "Deep inside the provincial park near the camping ground.",
                 treasureMessage: "Status pending...",
-                latitude: 43.4150, longitude: -79.7530, // ~7.2km
+                latitude: 43.4150, longitude: -79.7530,
                 validationCode: "BRONTEWILD", points: 300,
                 isTreasureFound: false, treasurePlaceBy: "Tram"
             )
