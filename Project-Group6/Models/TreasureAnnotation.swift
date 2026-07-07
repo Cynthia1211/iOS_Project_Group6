@@ -19,6 +19,6 @@ class TreasureAnnotation: NSObject, MKAnnotation {
         self.treasure = treasure
         self.coordinate = CLLocationCoordinate2D(latitude: treasure.latitude, longitude: treasure.longitude)
         self.title = treasure.title
-        self.subtitle = treasure.treasureDescription
+        self.subtitle = treasure.treasureMessage
     }
 }

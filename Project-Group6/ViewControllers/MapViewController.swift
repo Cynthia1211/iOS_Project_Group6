@@ -8,6 +8,7 @@
 import UIKit
 import MapKit
 import CoreLocation
+import FirebaseAuth
 
 class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     
@@ -28,7 +29,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         if let currentCoord = currentUserCoordinate {
             let maxDistance = getCurrentRadiusInMeters()
-            let region = MKCoordinateRegion(center: currentCoord, latitudinalMeters: maxDistance * 1.1, longitudinalMeters: maxDistance * 1.1)
+            let region = MKCoordinateRegion(center: currentCoord, latitudinalMeters: maxDistance * 1.05, longitudinalMeters: maxDistance * 1)
             mapView.setRegion(region, animated: true)
         }
     }
@@ -36,17 +37,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     private func getCurrentRadiusInMeters() -> Double {
         let sliderValue = round(distanceSlider.value)
         if sliderValue == 1 {
-            return 50.0         // 50m
+            return 500.0        // 500m
         } else if sliderValue == 2 {
-            return 200.0        // 200m
-        } else if sliderValue == 3 {
             return 1000.0       // 1km
-        } else if sliderValue == 4 {
+        } else if sliderValue == 3 {
             return 5000.0       // 5km
-        } else if sliderValue == 5 {
+        } else if sliderValue == 4 {
             return 10000.0      // 10km
         } else {
-            return 100000.0     // 10+ km
+            return 100000.0     // 100 km
         }
     }
     
@@ -54,17 +53,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     private func updateDistanceLabel() {
         let sliderValue = round(distanceSlider.value)
         if sliderValue == 1 {
-            distanceLabel.text = "Showing treasures around within 50m"
+            distanceLabel.text = "Showing treasures around you in 500m"
         } else if sliderValue == 2 {
-            distanceLabel.text = "Showing treasures around within 200m"
+            distanceLabel.text = "Showing treasures around you  in 1km"
         } else if sliderValue == 3 {
-            distanceLabel.text = "Showing treasures around within 1 km"
+            distanceLabel.text = "Showing treasures around you  in 5km"
         } else if sliderValue == 4 {
-            distanceLabel.text = "Showing treasures around within 5 km"
-        } else if sliderValue == 5 {
-            distanceLabel.text = "Showing treasures around within 10 km"
+            distanceLabel.text = "Showing treasures around you  in 10km"
         } else {
-            distanceLabel.text = "Showing treasures around within 10+ km" 
+            distanceLabel.text = "Showing treasures around you  in 100km"
         }
     }
     
@@ -83,6 +80,20 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         mapView.delegate = self
         setupLocationManager()
         updateDistanceLabel()
+        
+        
+        if let currentUser = Auth.auth().currentUser {
+            let uuid = currentUser.uid
+            let displayName = currentUser.displayName ?? "No Display Name"
+                        
+            print("========================================")
+            print("👤 Player UUID: \(uuid)")
+            print("📛 Player Name: \(displayName)")
+            print("========================================")
+                        
+        } else {
+            print("⚠️ User is not login")
+        }
         
     }
     
