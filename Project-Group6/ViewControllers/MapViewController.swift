@@ -84,9 +84,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         if let currentUser = Auth.auth().currentUser {
             let uuid = currentUser.uid
-            let displayName = currentUser.displayName ?? "No Display Name"
-                        
+            
             print("========================================")
+            print("MapViewController")
             print("Player UUID: \(uuid)")
             print("========================================")
                         
@@ -110,7 +110,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             
             if let oldCoord = currentUserCoordinate {
                 let oldLocation = CLLocation(latitude: oldCoord.latitude, longitude: oldCoord.longitude)
-                if location.distance(from: oldLocation) < 10 { // 如果位移小于10米，不刷新
+                if location.distance(from: oldLocation) < 10 {
                     return
                 }
             }
