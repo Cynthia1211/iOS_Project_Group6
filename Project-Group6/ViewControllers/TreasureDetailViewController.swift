@@ -34,8 +34,7 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate {
             let displayName = currentUser.displayName ?? "No Display Name"
                         
             print("========================================")
-            print("👤 Player UUID: \(uuid)")
-            print("📛 Player Name: \(displayName)")
+            print("Player UUID: \(uuid)")
             print("========================================")
                         
         } else {
@@ -67,29 +66,29 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate {
 
     @IBAction func btnFoundItClicked(_ sender: UIButton) {
         
-//        if Auth.auth().currentUser == nil {
-//            let loginAlert = UIAlertController(
-//                title: "Login Required",
-//                message: "You must be logged in to continue!",
-//                preferredStyle: .alert
-//            )
-//
-//            loginAlert.addAction(UIAlertAction(title: "Go to Login", style: .default, handler: { _ in
-//                if let loginVC = self.storyboard?.instantiateViewController(withIdentifier: "LoginViewController") {
-//
-//                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-//                       let window = windowScene.windows.first {
-//                        window.rootViewController = loginVC
-//                        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil, completion: nil)
-//                    }
-//                }
-//            }))
-//
-//            loginAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-//                    
-//            self.present(loginAlert, animated: true, completion: nil)
-//            return //
-//        }
+        if Auth.auth().currentUser == nil {
+            let loginAlert = UIAlertController(
+                title: "Login Required",
+                message: "You must be logged in to continue!",
+                preferredStyle: .alert
+            )
+
+            loginAlert.addAction(UIAlertAction(title: "Go to Login", style: .default, handler: { _ in
+                if let loginVC = self.storyboard?.instantiateViewController(withIdentifier: "LoginViewController") {
+
+                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                       let window = windowScene.windows.first {
+                        window.rootViewController = loginVC
+                        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil, completion: nil)
+                    }
+                }
+            }))
+
+            loginAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                    
+            self.present(loginAlert, animated: true, completion: nil)
+            return //
+        }
         
         guard let treasure = treasure else { return }
             

@@ -87,8 +87,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             let displayName = currentUser.displayName ?? "No Display Name"
                         
             print("========================================")
-            print("👤 Player UUID: \(uuid)")
-            print("📛 Player Name: \(displayName)")
+            print("Player UUID: \(uuid)")
             print("========================================")
                         
         } else {
@@ -108,6 +107,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
            // print("User Location Is Updated: \(location.coordinate.latitude), \(location.coordinate.longitude)")
+            
+            if let oldCoord = currentUserCoordinate {
+                let oldLocation = CLLocation(latitude: oldCoord.latitude, longitude: oldCoord.longitude)
+                if location.distance(from: oldLocation) < 10 { // 如果位移小于10米，不刷新
+                    return
+                }
+            }
                 
             currentUserCoordinate = location.coordinate
                 
