@@ -18,6 +18,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     @IBOutlet weak var distanceSlider: UISlider!
     @IBAction func sliderValueChanged(_ sender: UISlider) {
+        
+        isUserInteracting = false
+        
         let roundedValue = round(sender.value)
         if sender.value != roundedValue {
             sender.setValue(roundedValue, animated: false)
@@ -68,8 +71,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     let locationManager = CLLocationManager()
     var currentUserCoordinate: CLLocationCoordinate2D?
-    var isFirstLocationUpdate = true
-    
+    var isUserInteracting = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,7 +82,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         mapView.delegate = self
         setupLocationManager()
         updateDistanceLabel()
-        
         
         if let currentUser = Auth.auth().currentUser {
             let uuid = currentUser.uid
@@ -95,6 +96,25 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
         
     }
+    
+//    // 在 Storyboard 刚实例化这个页面时，最早期进行强行拦截
+//        override func awakeFromNib() {
+//            super.awakeFromNib()
+//            
+//            // 顺藤摸瓜找到包裹你的 TabBarController，直接把它改成全屏
+//            if let tabController = self.tabBarController {
+//                tabController.modalPresentationStyle = .fullScreen
+//            }
+//        }
+//
+//        override func viewWillAppear(_ animated: Bool) {
+//            super.viewWillAppear(animated)
+//            
+//            // 保留这行，做双重保险
+//            if let tabController = self.tabBarController {
+//                tabController.modalPresentationStyle = .fullScreen
+//            }
+//        }
     
     private func setupLocationManager() {
             locationManager.delegate = self
@@ -117,13 +137,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 
             currentUserCoordinate = location.coordinate
                 
-            if isFirstLocationUpdate {
+            if !isUserInteracting {
                 let currentRadius = getCurrentRadiusInMeters()
-                let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: currentRadius * 2, longitudinalMeters: currentRadius * 2)
-                mapView.setRegion(region, animated: true)
-                
-                isFirstLocationUpdate = false
+                        let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: currentRadius * 1.05, longitudinalMeters: currentRadius * 1)
+                        mapView.setRegion(region, animated: true)
             }
+            
                 
             filterTreasures()
         }
@@ -185,6 +204,20 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
         return pinView
     }
+
+    
+    func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+        if let view = mapView.subviews.first, let gestureRecognizers = view.gestureRecognizers {
+            for gesture in gestureRecognizers {
+                if gesture.state == .began || gesture.state == .changed {
+
+                    isUserInteracting = true
+                    
+                    break
+                }
+            }
+        }
+    }
         
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if let treasureAnnotation = view.annotation as? TreasureAnnotation {
@@ -199,17 +232,5 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             detailVC.treasure = selectedTreasure
         }
     }
-
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
