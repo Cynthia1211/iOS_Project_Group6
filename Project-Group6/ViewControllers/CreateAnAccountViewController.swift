@@ -95,7 +95,8 @@ class CreateAnAccountViewController: UIViewController {
                 formatter.dateFormat = "yyyy-MM-dd"
 
                 let birthDate = formatter.string(from: self.dateofBirth.date)
-
+                let uuid = UUID().uuidString
+                let score: Int = 0
 
                 let person = PeopleData()
 
@@ -103,7 +104,9 @@ class CreateAnAccountViewController: UIViewController {
                     theRow: 0,
                     theUsername: username,
                     theDateofBirth: birthDate,
-                    theEmail: email
+                    theEmail: email,
+                    theUuid: uuid,
+                    theScore: score
                 )
 
 
@@ -119,6 +122,7 @@ class CreateAnAccountViewController: UIViewController {
                     mainDelegate.currentUsername = username
                     mainDelegate.currentEmail = email
                     mainDelegate.currentDateOfBirth = birthDate
+               
 
 
                     DispatchQueue.main.async {

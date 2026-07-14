@@ -20,43 +20,143 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var databasePath :  String?
     var people : [PeopleData] = []
     
+    
     func insertIntoDatabase(person: PeopleData) -> Bool {
-        var db : OpaquePointer? = nil
-        var returnCode : Bool = true
+
+        var db: OpaquePointer? = nil
+        var returnCode = true
+
+        // Open database first
         if sqlite3_open(databasePath, &db) == SQLITE_OK {
-            var insertStatement : OpaquePointer? = nil
-            var insertStatementString : String = "INSERT INTO entries VALUES (NULL, ?, ?, ?)"
-            if sqlite3_prepare_v2(db, insertStatementString, -1, &insertStatement, nil) == SQLITE_OK{
+
+            print("Database opened successfully.")
+
+            // Check current table columns
+            var statement: OpaquePointer?
+
+            let pragmaSQL = "PRAGMA table_info(entries)"
+
+            if sqlite3_prepare_v2(db, pragmaSQL, -1, &statement, nil) == SQLITE_OK {
+
+                print("Current table columns:")
+
+                while sqlite3_step(statement) == SQLITE_ROW {
+
+                    if let text = sqlite3_column_text(statement, 1) {
+                        print(String(cString: text))
+                    }
+                }
+
+                sqlite3_finalize(statement)
+
+            } else {
+                print("Could not check table columns.")
+            }
+
+
+            // Insert user data
+            var insertStatement: OpaquePointer? = nil
+
+            let insertStatementString =
+            """
+            INSERT INTO entries (Username, DateofBirth, Email, uuid, score)
+            VALUES (?, ?, ?, ?, ?)
+            """
+
+            if sqlite3_prepare_v2(db,
+                                  insertStatementString,
+                                  -1,
+                                  &insertStatement,
+                                  nil) == SQLITE_OK {
+
+
                 let username = person.username! as NSString
                 let dateofBirth = person.dateofBirth! as NSString
                 let email = person.email! as NSString
-                
-                sqlite3_bind_text(insertStatement, 1, username.utf8String, -1, nil)
-                sqlite3_bind_text(insertStatement, 2, dateofBirth.utf8String, -1, nil)
-                sqlite3_bind_text(insertStatement, 3, email.utf8String, -1, nil)
-                
+                let uuid = (person.uuid ?? "") as NSString
+                let score = person.score ?? 0
+
+
+                sqlite3_bind_text(insertStatement,
+                                  1,
+                                  username.utf8String,
+                                  -1,
+                                  nil)
+
+                sqlite3_bind_text(insertStatement,
+                                  2,
+                                  dateofBirth.utf8String,
+                                  -1,
+                                  nil)
+
+                sqlite3_bind_text(insertStatement,
+                                  3,
+                                  email.utf8String,
+                                  -1,
+                                  nil)
+
+                sqlite3_bind_text(insertStatement,
+                                  4,
+                                  uuid.utf8String,
+                                  -1,
+                                  nil)
+
+                sqlite3_bind_int(insertStatement,
+                                 5,
+                                 Int32(score))
+
+
                 if sqlite3_step(insertStatement) == SQLITE_DONE {
+
                     let rowID = sqlite3_last_insert_rowid(db)
-                    print("successfully inserted row at \(rowID)")
-                }
-                else{
-                    print("could not insert row")
+                    print("Successfully inserted row at \(rowID)")
+
+                } else {
+
+                    print("Could not insert row")
                     returnCode = false
                 }
-                
+
+
                 sqlite3_finalize(insertStatement)
-            }
-            else{
-                print("insert statement could not be prepared")
+
+            } else {
+
+                print("Insert statement could not be prepared")
                 returnCode = false
             }
+
+
             sqlite3_close(db)
-        }
-        else{
-            print("unable to open database")
+
+        } else {
+
+            print("Unable to open database")
             returnCode = false
         }
+
+
         return returnCode
+    }
+    func updateDatabaseSchema() {
+
+        var db: OpaquePointer?
+
+        if sqlite3_open(databasePath, &db) == SQLITE_OK {
+
+            let sql = """
+            ALTER TABLE entries ADD COLUMN uuid TEXT;
+            ALTER TABLE entries ADD COLUMN score INTEGER;
+            """
+
+            if sqlite3_exec(db, sql, nil, nil, nil) == SQLITE_OK {
+                print("Database updated successfully")
+            } else {
+                print("Database update failed")
+            }
+
+            sqlite3_close(db)
+        }
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -73,17 +173,57 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     func checkAndCreateDatabase() {
         
-        var success = false
         let fileManager = FileManager.default
         
-        success = fileManager.fileExists(atPath: databasePath!)
+        print("Bundle DB:")
+        print(Bundle.main.resourcePath!.appending("/" + databaseName!))
         
-        if success { return }
-        let databasePathFromApp = Bundle.main.resourcePath?.appending("/" + databaseName!)
+        print("Documents DB:")
+        print(databasePath!)
         
-        try? fileManager.copyItem(atPath: databasePathFromApp!, toPath: databasePath!)
-    }
-    func readDataFromDatabase() {
+        // Copy database if it doesn't already exist
+        if !fileManager.fileExists(atPath: databasePath!) {
+            
+            if let databasePathFromApp = Bundle.main.resourcePath?.appending("/" + databaseName!) {
+                do {
+                    try fileManager.copyItem(atPath: databasePathFromApp, toPath: databasePath!)
+                    print("Database copied successfully.")
+                } catch {
+                    print("Error copying database: \(error)")
+                }
+            }
+        }
+        
+        // Open the database and print its columns
+        var db: OpaquePointer?
+        
+        if sqlite3_open(databasePath!, &db) == SQLITE_OK {
+            
+            var queryStatement: OpaquePointer?
+            let sql = "PRAGMA table_info(entries)"
+            
+            if sqlite3_prepare_v2(db, sql, -1, &queryStatement, nil) == SQLITE_OK {
+                
+                print("Columns in entries table:")
+                
+                while sqlite3_step(queryStatement) == SQLITE_ROW {
+                    
+                    if let columnName = sqlite3_column_text(queryStatement, 1) {
+                        let name = String(cString: columnName)
+                        print(name)
+                    }
+                }
+                
+                sqlite3_finalize(queryStatement)
+            }
+            
+            sqlite3_close(db)
+            
+        } else {
+            print("Unable to open database.")
+        }}
+    
+        func readDataFromDatabase() {
         
         people.removeAll()
         var db : OpaquePointer? = nil
@@ -98,16 +238,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let cusername = sqlite3_column_text(queryStatement,1)
                     let cdateofBirth = sqlite3_column_text(queryStatement,2)
                     let cemail = sqlite3_column_text(queryStatement,3)
+                    let cuuid = sqlite3_column_text(queryStatement,4)
+                    let cscore = sqlite3_column_int(queryStatement,5)
                     
                     let username = String(cString: cusername!)
                     let dateofBirth = String(cString: cdateofBirth!)
                     let email = String(cString: cemail!)
+                    let uuid = cuuid != nil ? String(cString: cuuid!) : ""
+                    let score = Int(CInt(cscore))
                     
                     let data : PeopleData = .init()
-                    data.initWithData(theRow: id, theUsername: username, theDateofBirth: dateofBirth, theEmail: email)
+                    data.initWithData(theRow: id, theUsername: username, theDateofBirth: dateofBirth, theEmail: email, theUuid: uuid, theScore: score)
                     people.append(data)
                     print("Querry Result")
-                    print("\(id) | \(username) | \(dateofBirth) | \(email)")
+                    print("\(id) | \(username) | \(dateofBirth) | \(email) | \(uuid) | \(score)")
                 }
                     sqlite3_finalize(queryStatement)
                     

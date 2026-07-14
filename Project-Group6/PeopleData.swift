@@ -13,13 +13,16 @@ class PeopleData: NSObject {
     var username: String?
     var dateofBirth: String?
     var email: String?
+    var uuid: String?
+    var score: Int? = 0
     
-    func initWithData(theRow i: Int,theUsername u: String,theDateofBirth d: String, theEmail e: String){
+    func initWithData(theRow i: Int,theUsername u: String,theDateofBirth d: String, theEmail e: String, theUuid uu: String, theScore s: Int){
         id = i
         username = u
         dateofBirth = d
         email = e
-        
+        uuid = uu
+        score = s
     }
 
 }
