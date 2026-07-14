@@ -22,6 +22,12 @@ class CreateAnAccountViewController: UIViewController {
     var iconClick = false
     // Image view used as an eye icon to allow users to show or hide their password.
     let imageicon = UIImageView()
+    // Stores the userName entered by the user during account registration.
+    @IBOutlet weak var userNameTextField: UITextField!
+    
+    
+    @IBOutlet weak var dateofBirth: UIDatePicker!
+    
     // Stores the email entered by the user during account registration.
     @IBOutlet weak var emailTextField: UITextField!
     
@@ -42,48 +48,95 @@ class CreateAnAccountViewController: UIViewController {
         */
     @IBAction func loginPressed(_ sender: UIButton) {
         guard let email = emailTextField.text,
-              let pass = passwordTextField.text,
-        let verifyPassword = verifyTextField.text else {
-            return}
-            
-            // Prevents account creation when required fields are empty.
-            // This improves user experience by informing users immediately about missing data.
+                  let pass = passwordTextField.text,
+                  let verifyPassword = verifyTextField.text else {
+                return
+            }
+
+
+            // Validate empty fields before creating account.
             if email.isEmpty || pass.isEmpty || verifyPassword.isEmpty {
                 showAlert(title: "Error",
                           message: "Please fill in all fields.")
                 return
             }
-            
-            // Ensures users create stronger passwords before storing credentials.
-            // Strong password requirements help reduce unauthorized account access.
+
+
+            // Validate password rules.
             if !isValidPassword(pass) {
                 showAlert(title: "Invalid Password",
-                          message: "Password must be at least 10 characters long and include:\n• One uppercase letter\n• One lowercase letter\n• One number\n• One special character")
+                          message: "Password does not meet requirements.")
                 return
             }
-            
-            // Prevents account creation when the password confirmation does not match.
-            // This avoids users accidentally registering with an unknown password.
+
+
+            // Confirm password match.
             if pass != verifyPassword {
                 showAlert(title: "Password Mismatch",
-                          message: "Verify Password must match Password.")
+                          message: "Passwords do not match.")
                 return
             }
-        // Firebase is used to securely manage user authentication instead of storing passwords locally.
-        Auth.auth().createUser(withEmail: email, password: pass) { (result, error) in
 
-                    if let error = error {
-                        self.showAlert(title: "Registration Failed",
-                                       message: error.localizedDescription)
-                        return
+
+            // Create Firebase account first.
+            Auth.auth().createUser(withEmail: email, password: pass) { result, error in
+                
+                if let error = error {
+                    self.showAlert(title: "Registration Failed",
+                                   message: error.localizedDescription)
+                    return
+                }
+
+
+                // Only save profile information after Firebase succeeds.
+                let username = self.userNameTextField.text ?? ""
+
+                let formatter = DateFormatter()
+                formatter.dateFormat = "yyyy-MM-dd"
+
+                let birthDate = formatter.string(from: self.dateofBirth.date)
+
+
+                let person = PeopleData()
+
+                person.initWithData(
+                    theRow: 0,
+                    theUsername: username,
+                    theDateofBirth: birthDate,
+                    theEmail: email
+                )
+
+
+                let mainDelegate = UIApplication.shared.delegate as! AppDelegate
+
+
+                let success = mainDelegate.insertIntoDatabase(person: person)
+
+
+                if success {
+
+                    // Store information for Profile screen.
+                    mainDelegate.currentUsername = username
+                    mainDelegate.currentEmail = email
+                    mainDelegate.currentDateOfBirth = birthDate
+
+
+                    DispatchQueue.main.async {
+
+                        self.performSegue(
+                            withIdentifier: "goToLogin",
+                            sender: self
+                        )
                     }
-            // Moves the user to the login page after successful account creation.
-             // This allows the user to authenticate using the newly created account.
-                    self.performSegue(withIdentifier: "goToLogin", sender: self)
+
+                } else {
+
+                    self.showAlert(title: "Database Error",
+                                   message: "Could not save profile information.")
                 }
             }
-    /**
-         Validates whether the password meets the application's security requirements.
+        }
+         /**Validates whether the password meets the application's security requirements.
          
          Passwords must contain uppercase letters, lowercase letters,
          numbers, special characters, and have a minimum length.
