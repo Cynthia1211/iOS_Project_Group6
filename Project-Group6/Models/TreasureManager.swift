@@ -214,6 +214,49 @@ class TreasureManager {
         return treasures
     }
     
+
+    func addNewTreasure(treasure: Treasure) -> Bool {
+        var db: OpaquePointer? = nil
+        guard let path = databasePath else { return false }
+        var isSuccess = false
+        
+        if sqlite3_open(path, &db) == SQLITE_OK {
+
+            let insertSQL = """
+            INSERT INTO treasures (id, title, treasureMessage, latitude, longitude, validationCode, points, isTreasureFound, treasurePlaceBy, treasureFoundby) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            """
+            
+            var statement: OpaquePointer? = nil
+            
+            if sqlite3_prepare_v2(db, insertSQL, -1, &statement, nil) == SQLITE_OK {
+
+                sqlite3_bind_text(statement, 1, (treasure.id as NSString).utf8String, -1, nil)
+                sqlite3_bind_text(statement, 2, (treasure.title as NSString).utf8String, -1, nil)
+                sqlite3_bind_text(statement, 3, (treasure.treasureMessage as NSString).utf8String, -1, nil)
+                sqlite3_bind_double(statement, 4, treasure.latitude)
+                sqlite3_bind_double(statement, 5, treasure.longitude)
+                sqlite3_bind_text(statement, 6, (treasure.validationCode as NSString).utf8String, -1, nil)
+                sqlite3_bind_int(statement, 7, Int32(treasure.points))
+                sqlite3_bind_int(statement, 8, treasure.isTreasureFound ? 1 : 0)
+                sqlite3_bind_text(statement, 9, (treasure.treasurePlaceBy as NSString).utf8String, -1, nil)
+                sqlite3_bind_text(statement, 10, (treasure.treasureFoundby as NSString).utf8String, -1, nil)
+                
+                if sqlite3_step(statement) == SQLITE_DONE {
+                    print("New treasure '\(treasure.title)' added to database.")
+                    isSuccess = true
+                } else {
+                    let errmsg = String(cString: sqlite3_errmsg(db)!)
+                    print("Error inserting treasure: \(errmsg)")
+                }
+                
+                sqlite3_finalize(statement)
+            }
+            sqlite3_close(db)
+        }
+        
+        return isSuccess
+    }
     
     
     // Temp use
