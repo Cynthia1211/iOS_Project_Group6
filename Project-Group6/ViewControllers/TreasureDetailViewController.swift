@@ -31,7 +31,6 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate {
         
         if let currentUser = Auth.auth().currentUser {
             let uuid = currentUser.uid
-            let displayName = currentUser.displayName ?? "No Display Name"
                         
             print("========================================")
             print("Player UUID: \(uuid)")
@@ -66,16 +65,16 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate {
 
     @IBAction func btnFoundItClicked(_ sender: UIButton) {
         
-        if Auth.auth().currentUser == nil {
+        guard let currentUser = Auth.auth().currentUser else {
             let loginAlert = UIAlertController(
                 title: "Login Required",
                 message: "You must be logged in to continue!",
                 preferredStyle: .alert
             )
-
+            
             loginAlert.addAction(UIAlertAction(title: "Go to Login", style: .default, handler: { _ in
                 if let loginVC = self.storyboard?.instantiateViewController(withIdentifier: "LoginViewController") {
-
+                    
                     if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                        let window = windowScene.windows.first {
                         window.rootViewController = loginVC
@@ -83,55 +82,53 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate {
                     }
                 }
             }))
-
+            
             loginAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-                    
+            
             self.present(loginAlert, animated: true, completion: nil)
-            return //
+            return
         }
         
+        let userUUID = currentUser.uid
+        
         guard let treasure = treasure else { return }
-            
+        
         guard let inputCode = txtTreasureCode.text, !inputCode.isEmpty else {
             let emptyAlert = UIAlertController(title: "Notice", message: "Scan or enter the code first!", preferredStyle: .alert)
             emptyAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             present(emptyAlert, animated: true, completion: nil)
             return
         }
-            
+        
         if inputCode.trimmingCharacters(in: .whitespacesAndNewlines) == treasure.validationCode {
             
-            // Temp
-            let currentMockUUID = "user_id_111"
-            
-            if let userIndex = UserMockData.sampleUsers.firstIndex(where: { $0.uuid == currentMockUUID }) {
-                UserMockData.sampleUsers[userIndex].score += treasure.points
-                print("========================================")
-                print("👤: \(UserMockData.sampleUsers[userIndex].nickname)")
-                print("💰: +\(treasure.points) points")
-                print("📈: \(UserMockData.sampleUsers[userIndex].score) points")
-                print("========================================")
-            }
+            let scoreUpdated = TreasureManager.shared.updateUserScore(userUUID: userUUID, additionalPoints: treasure.points)
 
+            let treasureUpdated = TreasureManager.shared.markTreasureAsFound(treasureId: treasure.id, foundByUserId: userUUID)
+            
             treasure.isTreasureFound = true
-            treasure.treasureFoundby = currentMockUUID
-            print("========================================")
-            print("title: \(treasure.title)")
-            print("isFound: \(treasure.isTreasureFound)")
-            print("found by: \(treasure.treasureFoundby)")
-            print("========================================")
-                
+            treasure.treasureFoundby = userUUID
+            
+            if scoreUpdated && treasureUpdated {
+                print("Database updated successfully.")
+            } else {
+                print("Database update encountered an error.")
+            }
+            
+            // Temp use
+            TreasureManager.shared.printRealDatabaseStatus(for: treasure.id, userUUID: userUUID)
+            
             let successAlert = UIAlertController(
                 title: "Congratulations! 🎉",
-                message: "Success! You earned \(treasure.points) points and successfully claimed this treasure!",
+                message: "Success! You earned \(treasure.points) points!",
                 preferredStyle: .alert
             )
-                
+            
             successAlert.addAction(UIAlertAction(title: "Awesome", style: .default, handler: { _ in
                 self.navigationController?.popViewController(animated: true)
             }))
             present(successAlert, animated: true, completion: nil)
-                
+            
         } else {
             let errorAlert = UIAlertController(
                 title: "Invalid Code",
@@ -140,7 +137,10 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate {
             )
             errorAlert.addAction(UIAlertAction(title: "Try Again", style: .default, handler: nil))
             present(errorAlert, animated: true, completion: nil)
+            
         }
+    
+        
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

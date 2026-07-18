@@ -75,9 +75,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Temp use
-        self.treasuresArray = MockData.treasures
 
         mapView.delegate = self
         setupLocationManager()
@@ -96,25 +93,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
         
     }
-    
-//    // 在 Storyboard 刚实例化这个页面时，最早期进行强行拦截
-//        override func awakeFromNib() {
-//            super.awakeFromNib()
-//            
-//            // 顺藤摸瓜找到包裹你的 TabBarController，直接把它改成全屏
-//            if let tabController = self.tabBarController {
-//                tabController.modalPresentationStyle = .fullScreen
-//            }
-//        }
-//
-//        override func viewWillAppear(_ animated: Bool) {
-//            super.viewWillAppear(animated)
-//            
-//            // 保留这行，做双重保险
-//            if let tabController = self.tabBarController {
-//                tabController.modalPresentationStyle = .fullScreen
-//            }
-//        }
     
     private func setupLocationManager() {
             locationManager.delegate = self
@@ -154,36 +132,22 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
 
     private func filterTreasures() {
- 
         guard let currentCoord = currentUserCoordinate else {
             print("No User Location")
             return
         }
-            
- 
+        
         mapView.removeAnnotations(mapView.annotations)
-            
-        let centerLocation = CLLocation(latitude: currentCoord.latitude, longitude: currentCoord.longitude)
-        let maxDistance = getCurrentRadiusInMeters()
-            
-        // Using MockData.
-        for treasure in treasuresArray {
-            
-            if treasure.isTreasureFound {
-                continue 
-            }
-            
-            let treasureLocation = CLLocation(latitude: treasure.latitude, longitude: treasure.longitude)
-            let distanceInMeters = centerLocation.distance(from: treasureLocation)
-                
-            if distanceInMeters <= maxDistance {
-                let annotation = TreasureAnnotation(treasure: treasure)
-                mapView.addAnnotation(annotation)
-            }
-        }
-            
+        
+        let currentHalfSideLength = getCurrentRadiusInMeters()
+        
+        self.treasuresArray = TreasureManager.shared.fetchTreasuresAround(
+            centerLat: currentCoord.latitude, centerLon: currentCoord.longitude, halfSideLengthInMeters: currentHalfSideLength )
+        
+        let annotations = self.treasuresArray.map { TreasureAnnotation(treasure: $0) }
+        mapView.addAnnotations(annotations)
+        
     }
-    
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation is MKUserLocation { return nil }

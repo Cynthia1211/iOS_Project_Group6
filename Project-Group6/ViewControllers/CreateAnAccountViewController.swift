@@ -95,7 +95,7 @@ class CreateAnAccountViewController: UIViewController {
                 formatter.dateFormat = "yyyy-MM-dd"
 
                 let birthDate = formatter.string(from: self.dateofBirth.date)
-                let uuid = UUID().uuidString
+                let uuid = result?.user.uid ?? ""
                 let score: Int = 0
 
                 let person = PeopleData()
