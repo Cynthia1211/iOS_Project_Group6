@@ -126,9 +126,93 @@ class TreasureManager {
         return success
     }
     
-    
-    
-    
+    func searchTreasureByPlaceBy(userUUID: String) -> [Treasure] {
+        var treasures = [Treasure]()
+        var db: OpaquePointer? = nil
+        guard let path = databasePath else { return treasures }
+        
+        if sqlite3_open(path, &db) == SQLITE_OK {
+
+            let querySQL = """
+            SELECT * FROM treasures WHERE treasurePlaceBy = ?
+            """
+            
+            var statement: OpaquePointer? = nil
+            
+            if sqlite3_prepare_v2(db, querySQL, -1, &statement, nil) == SQLITE_OK {
+
+                sqlite3_bind_text(statement, 1, (userUUID as NSString).utf8String, -1, nil)
+                
+                while sqlite3_step(statement) == SQLITE_ROW {
+                    let id = String(cString: sqlite3_column_text(statement, 0))
+                    let title = String(cString: sqlite3_column_text(statement, 1))
+                    let message = String(cString: sqlite3_column_text(statement, 2))
+                    let lat = sqlite3_column_double(statement, 3)
+                    let lon = sqlite3_column_double(statement, 4)
+                    let code = String(cString: sqlite3_column_text(statement, 5))
+                    let pts = Int(sqlite3_column_int(statement, 6))
+                    let isFound = sqlite3_column_int(statement, 7) == 1
+                    let placedBy = String(cString: sqlite3_column_text(statement, 8))
+                    let foundBy = sqlite3_column_text(statement, 9) != nil ? String(cString: sqlite3_column_text(statement, 9)!) : ""
+                    
+                    let treasure = Treasure(
+                        id: id, title: title, treasureMessage: message,
+                        latitude: lat, longitude: lon, validationCode: code, points: pts,
+                        isTreasureFound: isFound, treasurePlaceBy: placedBy, treasureFoundby: foundBy
+                    )
+                    treasures.append(treasure)
+                }
+                sqlite3_finalize(statement)
+            }
+            sqlite3_close(db)
+        }
+
+        return treasures
+    }
+
+    func searchTreasureByFoundBy(userUUID: String) -> [Treasure] {
+        var treasures = [Treasure]()
+        var db: OpaquePointer? = nil
+        guard let path = databasePath else { return treasures }
+        
+        if sqlite3_open(path, &db) == SQLITE_OK {
+
+            let querySQL = """
+            SELECT * FROM treasures WHERE isTreasureFound = 1 AND treasureFoundby = ?
+            """
+            
+            var statement: OpaquePointer? = nil
+            
+            if sqlite3_prepare_v2(db, querySQL, -1, &statement, nil) == SQLITE_OK {
+
+                sqlite3_bind_text(statement, 1, (userUUID as NSString).utf8String, -1, nil)
+                
+                while sqlite3_step(statement) == SQLITE_ROW {
+                    let id = String(cString: sqlite3_column_text(statement, 0))
+                    let title = String(cString: sqlite3_column_text(statement, 1))
+                    let message = String(cString: sqlite3_column_text(statement, 2))
+                    let lat = sqlite3_column_double(statement, 3)
+                    let lon = sqlite3_column_double(statement, 4)
+                    let code = String(cString: sqlite3_column_text(statement, 5))
+                    let pts = Int(sqlite3_column_int(statement, 6))
+                    let isFound = sqlite3_column_int(statement, 7) == 1
+                    let placedBy = String(cString: sqlite3_column_text(statement, 8))
+                    let foundBy = sqlite3_column_text(statement, 9) != nil ? String(cString: sqlite3_column_text(statement, 9)!) : ""
+                    
+                    let treasure = Treasure(
+                        id: id, title: title, treasureMessage: message,
+                        latitude: lat, longitude: lon, validationCode: code, points: pts,
+                        isTreasureFound: isFound, treasurePlaceBy: placedBy, treasureFoundby: foundBy
+                    )
+                    treasures.append(treasure)
+                }
+                sqlite3_finalize(statement)
+            }
+            sqlite3_close(db)
+        }
+
+        return treasures
+    }
     
     
     
