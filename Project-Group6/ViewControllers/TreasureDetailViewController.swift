@@ -52,51 +52,7 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
         
     }
     
-    private func setupUI() {
-        guard let treasure = treasure else { return }
-        
-        title = treasure.title
-        labelX.text = "X: \(treasure.latitude)"
-        labelY.text = "Y: \(treasure.longitude)"
-        labelDescription.text = "\(treasure.title)"
-        labelMessage.text = "\(treasure.treasureMessage)"
-        
-        
-        let coordinate = CLLocationCoordinate2D(latitude: treasure.latitude, longitude: treasure.longitude)
-        let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 100, longitudinalMeters: 100)
-        smallMapView.setRegion(region, animated: false)
-        
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = coordinate
-        annotation.title = treasure.title
-        smallMapView.addAnnotation(annotation)
-    }
-    
-    // MARK: - CLLocationManagerDelegate
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        // 获取最新的位置并更新 currentLocation
-        if let location = locations.last {
-            self.currentLocation = location
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Failed to get user location: \(error.localizedDescription)")
-    }
-    
-    private func isUserNearTreasure() -> Bool {
-        guard let currentLocation = currentLocation, let treasure = treasure else {
-            return false
-        }
-        
-        let treasureLocation = CLLocation(latitude: treasure.latitude, longitude: treasure.longitude)
-        let distanceInMeters = currentLocation.distance(from: treasureLocation)
-        
-        print("Distance: \(distanceInMeters)")
-        
-        return distanceInMeters <= 30.0
-    }
-    
+
     @IBAction func btnScanClicked(_ sender: UIButton) {
         
         guard DataScannerViewController.isSupported && DataScannerViewController.isAvailable else {
@@ -121,31 +77,6 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
         present(scanner, animated: true) {
             try? scanner.startScanning()
         }
-    }
-    
-    func dataScanner(_ dataScanner: DataScannerViewController, didTapOn item: RecognizedItem) {
-        var scannedCode: String?
-        
-        switch item {
-        case .text(let text):
-            scannedCode = text.transcript
-        case .barcode(let barcode):
-            scannedCode = barcode.payloadStringValue
-        @unknown default:
-            break
-        }
-        
-        if let code = scannedCode {
-            
-            dataScanner.dismiss(animated: true) { [weak self] in
-                guard let self = self else { return }
-                
-                self.txtTreasureCode.text = code
-                
-                self.btnFoundItClicked(self.claimButton)
-            }
-        }
-        
     }
     
     @IBAction func btnFoundItClicked(_ sender: UIButton) {
@@ -215,6 +146,8 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
             
             TreasureManager.shared.printRealDatabaseStatus(for: treasure.id, userUUID: userUUID)
             
+            showConfettiImageEffect()
+            
             let successAlert = UIAlertController(
                 title: "Congratulations! 🎉",
                 message: "Success! You earned \(treasure.points) points!",
@@ -262,6 +195,111 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
         mapItem.name = treasure.title
         
         mapItem.openInMaps()
+        
+    }
+    
+    private func setupUI() {
+        guard let treasure = treasure else { return }
+        
+        title = treasure.title
+        labelX.text = "X: \(treasure.latitude)"
+        labelY.text = "Y: \(treasure.longitude)"
+        labelDescription.text = "\(treasure.title)"
+        labelMessage.text = "\(treasure.treasureMessage)"
+        
+        
+        let coordinate = CLLocationCoordinate2D(latitude: treasure.latitude, longitude: treasure.longitude)
+        let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 100, longitudinalMeters: 100)
+        smallMapView.setRegion(region, animated: false)
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        annotation.title = treasure.title
+        smallMapView.addAnnotation(annotation)
+    }
+    
+    func dataScanner(_ dataScanner: DataScannerViewController, didTapOn item: RecognizedItem) {
+        var scannedCode: String?
+        
+        switch item {
+        case .text(let text):
+            scannedCode = text.transcript
+        case .barcode(let barcode):
+            scannedCode = barcode.payloadStringValue
+        @unknown default:
+            break
+        }
+        
+        if let code = scannedCode {
+            
+            dataScanner.dismiss(animated: true) { [weak self] in
+                guard let self = self else { return }
+                
+                self.txtTreasureCode.text = code
+                
+                self.btnFoundItClicked(self.claimButton)
+            }
+        }
+        
+    }
+    
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+
+        if let location = locations.last {
+            self.currentLocation = location
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Failed to get user location: \(error.localizedDescription)")
+    }
+    
+    private func isUserNearTreasure() -> Bool {
+        guard let currentLocation = currentLocation, let treasure = treasure else {
+            return false
+        }
+        
+        let treasureLocation = CLLocation(latitude: treasure.latitude, longitude: treasure.longitude)
+        let distanceInMeters = currentLocation.distance(from: treasureLocation)
+        
+        print("Distance: \(distanceInMeters)")
+        
+        return distanceInMeters <= 30.0
+    }
+    
+    
+    private func showConfettiImageEffect() {
+        
+        guard let confettiImage = UIImage(named: "congratulation") else { return }
+        
+        let screenWidth = view.bounds.width
+        let screenHeight = view.bounds.height
+        let imageRatio = confettiImage.size.height / confettiImage.size.width
+        let imageHeight = screenWidth * imageRatio
+        
+        
+        let confettiImageView = UIImageView(image: confettiImage)
+        confettiImageView.contentMode = .scaleAspectFit
+        
+        confettiImageView.frame = CGRect(x: 0, y: -imageHeight, width: screenWidth, height: imageHeight)
+        confettiImageView.alpha = 1.0
+        
+        view.addSubview(confettiImageView)
+        
+        UIView.animate(
+            withDuration: 2.8,
+            delay: 0,
+            options: [.curveEaseInOut],
+            animations: {
+
+                confettiImageView.frame.origin.y = screenHeight
+            },
+            completion: { _ in
+
+                confettiImageView.removeFromSuperview()
+            }
+        )
         
     }
     
