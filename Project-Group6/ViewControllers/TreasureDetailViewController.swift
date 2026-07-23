@@ -48,8 +48,8 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate {
         title = treasure.title
         labelX.text = "X: \(treasure.latitude)"
         labelY.text = "Y: \(treasure.longitude)"
-        labelDescription.text = "Description: \(treasure.title)"
-        labelMessage.text = "Messages: \(treasure.treasureMessage)"
+        labelDescription.text = "\(treasure.title)"
+        labelMessage.text = "\(treasure.treasureMessage)"
         
 
         let coordinate = CLLocationCoordinate2D(latitude: treasure.latitude, longitude: treasure.longitude)
@@ -115,7 +115,6 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate {
                 print("Database update encountered an error.")
             }
             
-            // Temp use
             TreasureManager.shared.printRealDatabaseStatus(for: treasure.id, userUUID: userUUID)
             
             let successAlert = UIAlertController(

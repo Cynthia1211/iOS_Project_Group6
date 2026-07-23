@@ -58,11 +58,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         if sliderValue == 1 {
             distanceLabel.text = "Showing treasures around you in 500m"
         } else if sliderValue == 2 {
-            distanceLabel.text = "Showing treasures around you  in 1km"
+            distanceLabel.text = "Showing treasures around you in 1km"
         } else if sliderValue == 3 {
-            distanceLabel.text = "Showing treasures around you  in 5km"
+            distanceLabel.text = "Showing treasures around you in 5km"
         } else if sliderValue == 4 {
-            distanceLabel.text = "Showing treasures around you  in 10km"
+            distanceLabel.text = "Showing treasures around you in 10km"
         } else {
             distanceLabel.text = "Showing treasures around you  in 100km"
         }
