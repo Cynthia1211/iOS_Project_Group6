@@ -7,9 +7,11 @@
 
 import UIKit
 import MapKit
-import FirebaseAuth
+import CoreLocation
+import FirebaseAuth // To get user's uuid
+import VisionKit // To enable scan function
 
-class TreasureDetailViewController: UIViewController, UITextFieldDelegate {
+class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataScannerViewControllerDelegate, CLLocationManagerDelegate {
 
     @IBOutlet weak var smallMapView: MKMapView!
     @IBOutlet weak var labelX: UILabel!
@@ -18,8 +20,13 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var labelMessage: UILabel!
     @IBOutlet weak var txtTreasureCode: UITextField!
     @IBOutlet weak var claimButton: UIButton!
+    @IBOutlet weak var scanButton: UIButton!
+    
     
     var treasure: Treasure?
+    
+    private let locationManager = CLLocationManager()
+    private var currentLocation: CLLocation?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,14 +35,17 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate {
         
         setupUI()
         
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
         
         if let currentUser = Auth.auth().currentUser {
             let uuid = currentUser.uid
-                        
+            
             print("========================================")
             print("Player UUID: \(uuid)")
             print("========================================")
-                        
+            
         } else {
             print("⚠️ User is not login")
         }
@@ -61,7 +71,69 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate {
         annotation.title = treasure.title
         smallMapView.addAnnotation(annotation)
     }
+    
+    private func isUserNearTreasure() -> Bool {
+        guard let currentLocation = currentLocation, let treasure = treasure else {
+            return false
+        }
+        
+        let treasureLocation = CLLocation(latitude: treasure.latitude, longitude: treasure.longitude)
+        let distanceInMeters = currentLocation.distance(from: treasureLocation)
+        
+        
+        return distanceInMeters <= 30.0
+    }
 
+    @IBAction func btnScanClicked(_ sender: UIButton) {
+        
+        guard DataScannerViewController.isSupported && DataScannerViewController.isAvailable else {
+            let alert = UIAlertController(title: "Scan Unavailable", message: "Your device does not support camera scanning.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            present(alert, animated: true)
+            return
+        }
+        
+        
+        let scanner = DataScannerViewController(
+            recognizedDataTypes: [
+                .barcode(symbologies: [.qr]),
+                .text()
+            ],
+            qualityLevel: .balanced,
+            recognizesMultipleItems: false,
+            isHighlightingEnabled: true
+        )
+        
+        scanner.delegate = self
+        present(scanner, animated: true) {
+            try? scanner.startScanning()
+        }
+    }
+        
+    func dataScanner(_ dataScanner: DataScannerViewController, didTapOn item: RecognizedItem) {
+        var scannedCode: String?
+        
+        switch item {
+        case .text(let text):
+            scannedCode = text.transcript
+        case .barcode(let barcode):
+            scannedCode = barcode.payloadStringValue
+        @unknown default:
+            break
+        }
+        
+        if let code = scannedCode {
+
+            dataScanner.dismiss(animated: true) { [weak self] in
+                guard let self = self else { return }
+                
+                self.txtTreasureCode.text = code
+                
+                self.btnFoundItClicked(self.claimButton)
+            }
+        }
+        
+    }
 
     @IBAction func btnFoundItClicked(_ sender: UIButton) {
         
@@ -89,9 +161,22 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
-        let userUUID = currentUser.uid
         
         guard let treasure = treasure else { return }
+        
+        if !isUserNearTreasure() {
+            let distanceAlert = UIAlertController(
+                title: "Too Far Away",
+                message: "You are too far from the treasure. Get closer!",
+                preferredStyle: .alert
+            )
+            distanceAlert.addAction(UIAlertAction(title: "OK", style: .default))
+            present(distanceAlert, animated: true)
+            return
+            
+        }
+        
+        let userUUID = currentUser.uid
         
         guard let inputCode = txtTreasureCode.text, !inputCode.isEmpty else {
             let emptyAlert = UIAlertController(title: "Notice", message: "Scan or enter the code first!", preferredStyle: .alert)

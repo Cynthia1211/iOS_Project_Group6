@@ -10,11 +10,13 @@
 		244CB2F42FF725A90011370B /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 244CB2F32FF725A90011370B /* FirebaseAnalytics */; };
 		244CB2F62FF725A90011370B /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 244CB2F52FF725A90011370B /* FirebaseAuth */; };
 		244CB2F82FF725A90011370B /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 244CB2F72FF725A90011370B /* FirebaseCore */; };
+		24B373213011B3F1008759B0 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24B373203011B3F1008759B0 /* MapKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0A21377C2FF6C628006175E0 /* Project-Group6.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Project-Group6.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AEE0D0830069185001C3CA6 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		24B373203011B3F1008759B0 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -45,6 +47,7 @@
 			files = (
 				244CB2F42FF725A90011370B /* FirebaseAnalytics in Frameworks */,
 				244CB2F82FF725A90011370B /* FirebaseCore in Frameworks */,
+				24B373213011B3F1008759B0 /* MapKit.framework in Frameworks */,
 				244CB2F62FF725A90011370B /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -72,6 +75,7 @@
 		0AEE0D0730069184001C3CA6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				24B373203011B3F1008759B0 /* MapKit.framework */,
 				0AEE0D0830069185001C3CA6 /* libsqlite3.tbd */,
 			);
 			name = Frameworks;

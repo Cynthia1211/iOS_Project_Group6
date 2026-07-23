@@ -485,12 +485,6 @@
                                     <action selector="btnFoundItClicked:" destination="6OI-XB-XPV" eventType="touchUpInside" id="aaO-on-Y8I"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Message to Hunter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nhp-VP-vei">
-                                <rect key="frame" x="25" y="348" width="179" height="24"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="azH-02-pxg">
                                 <rect key="frame" x="20" y="64" width="368" height="200"/>
                                 <constraints>
@@ -506,6 +500,20 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </mapView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Message to Hunter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nhp-VP-vei">
+                                <rect key="frame" x="25" y="348" width="179" height="24"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eNX-sG-FJR">
+                                <rect key="frame" x="182" y="416.33333333333331" width="93.666666666666686" height="34.333333333333314"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="camera.fill" catalog="system" title="Scan"/>
+                                <connections>
+                                    <action selector="btnScanClicked:" destination="6OI-XB-XPV" eventType="touchUpInside" id="KBs-KM-Llo"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="b3Y-7d-z9o"/>
                         <color key="backgroundColor" red="0.96439450979999997" green="0.94959145779999998" blue="0.90979820489999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -525,12 +533,14 @@
                             <constraint firstAttribute="trailing" secondItem="DBG-lO-bNQ" secondAttribute="trailing" constant="10" id="cKa-r4-bqZ"/>
                             <constraint firstItem="XfS-vY-75C" firstAttribute="leading" secondItem="b3Y-7d-z9o" secondAttribute="leading" constant="25" id="ehO-Ri-p8O"/>
                             <constraint firstItem="DBG-lO-bNQ" firstAttribute="leading" secondItem="b3Y-7d-z9o" secondAttribute="leading" constant="10" id="kXQ-WU-Nqe"/>
+                            <constraint firstItem="eNX-sG-FJR" firstAttribute="leading" secondItem="XfS-vY-75C" secondAttribute="trailing" constant="2" id="mvJ-Uc-tM2"/>
                             <constraint firstItem="kgO-Yz-hfA" firstAttribute="top" secondItem="azH-02-pxg" secondAttribute="bottom" constant="8" id="n7U-1o-DZV"/>
                             <constraint firstItem="Rx3-Wz-ZEM" firstAttribute="top" secondItem="azH-02-pxg" secondAttribute="bottom" constant="8" id="nKo-OB-MPR"/>
                             <constraint firstItem="yP4-jy-H3k" firstAttribute="leading" secondItem="b3Y-7d-z9o" secondAttribute="leading" constant="25" id="o33-uJ-V4F"/>
                             <constraint firstItem="nhp-VP-vei" firstAttribute="top" secondItem="iLo-Ez-xeK" secondAttribute="bottom" constant="10" id="oBR-XO-I1Y"/>
                             <constraint firstItem="iLo-Ez-xeK" firstAttribute="leading" secondItem="b3Y-7d-z9o" secondAttribute="leading" constant="25" id="ogd-Vh-9xk"/>
                             <constraint firstItem="iLo-Ez-xeK" firstAttribute="top" secondItem="Rx3-Wz-ZEM" secondAttribute="bottom" constant="5" id="poz-gD-YVS"/>
+                            <constraint firstItem="eNX-sG-FJR" firstAttribute="top" secondItem="yP4-jy-H3k" secondAttribute="bottom" constant="16" id="wl1-VU-F37"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="6En-eV-zIT"/>
@@ -540,6 +550,7 @@
                         <outlet property="labelMessage" destination="yP4-jy-H3k" id="10k-SN-O9n"/>
                         <outlet property="labelX" destination="Rx3-Wz-ZEM" id="fYR-rc-bJj"/>
                         <outlet property="labelY" destination="kgO-Yz-hfA" id="eTM-7p-mMF"/>
+                        <outlet property="scanButton" destination="eNX-sG-FJR" id="C39-QG-dsh"/>
                         <outlet property="smallMapView" destination="azH-02-pxg" id="svv-ZK-NS5"/>
                         <outlet property="txtTreasureCode" destination="XfS-vY-75C" id="nqU-Vz-A7s"/>
                     </connections>
@@ -668,6 +679,7 @@
         <segue reference="pvj-eu-qka"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <image name="camera.fill" catalog="system" width="128" height="93"/>
         <image name="list.number" catalog="system" width="128" height="97"/>
         <image name="login" width="447" height="447"/>
         <image name="map" catalog="system" width="128" height="112"/>
