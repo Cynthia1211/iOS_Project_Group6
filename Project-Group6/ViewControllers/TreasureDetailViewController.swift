@@ -12,7 +12,7 @@ import FirebaseAuth // To get user's uuid
 import VisionKit // To enable scan function
 
 class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataScannerViewControllerDelegate, CLLocationManagerDelegate {
-
+    
     @IBOutlet weak var smallMapView: MKMapView!
     @IBOutlet weak var labelX: UILabel!
     @IBOutlet weak var labelY: UILabel!
@@ -27,7 +27,7 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
     
     private let locationManager = CLLocationManager()
     private var currentLocation: CLLocation?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -54,14 +54,14 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
     
     private func setupUI() {
         guard let treasure = treasure else { return }
-
+        
         title = treasure.title
         labelX.text = "X: \(treasure.latitude)"
         labelY.text = "Y: \(treasure.longitude)"
         labelDescription.text = "\(treasure.title)"
         labelMessage.text = "\(treasure.treasureMessage)"
         
-
+        
         let coordinate = CLLocationCoordinate2D(latitude: treasure.latitude, longitude: treasure.longitude)
         let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 100, longitudinalMeters: 100)
         smallMapView.setRegion(region, animated: false)
@@ -72,6 +72,18 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
         smallMapView.addAnnotation(annotation)
     }
     
+    // MARK: - CLLocationManagerDelegate
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        // 获取最新的位置并更新 currentLocation
+        if let location = locations.last {
+            self.currentLocation = location
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Failed to get user location: \(error.localizedDescription)")
+    }
+    
     private func isUserNearTreasure() -> Bool {
         guard let currentLocation = currentLocation, let treasure = treasure else {
             return false
@@ -80,10 +92,11 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
         let treasureLocation = CLLocation(latitude: treasure.latitude, longitude: treasure.longitude)
         let distanceInMeters = currentLocation.distance(from: treasureLocation)
         
+        print("Distance: \(distanceInMeters)")
         
         return distanceInMeters <= 30.0
     }
-
+    
     @IBAction func btnScanClicked(_ sender: UIButton) {
         
         guard DataScannerViewController.isSupported && DataScannerViewController.isAvailable else {
@@ -109,7 +122,7 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
             try? scanner.startScanning()
         }
     }
-        
+    
     func dataScanner(_ dataScanner: DataScannerViewController, didTapOn item: RecognizedItem) {
         var scannedCode: String?
         
@@ -123,7 +136,7 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
         }
         
         if let code = scannedCode {
-
+            
             dataScanner.dismiss(animated: true) { [weak self] in
                 guard let self = self else { return }
                 
@@ -134,7 +147,7 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
         }
         
     }
-
+    
     @IBAction func btnFoundItClicked(_ sender: UIButton) {
         
         guard let currentUser = Auth.auth().currentUser else {
@@ -188,7 +201,7 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
         if inputCode.trimmingCharacters(in: .whitespacesAndNewlines) == treasure.validationCode {
             
             let scoreUpdated = TreasureManager.shared.updateUserScore(userUUID: userUUID, additionalPoints: treasure.points)
-
+            
             let treasureUpdated = TreasureManager.shared.markTreasureAsFound(treasureId: treasure.id, foundByUserId: userUUID)
             
             treasure.isTreasureFound = true
@@ -208,9 +221,21 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
                 preferredStyle: .alert
             )
             
-            successAlert.addAction(UIAlertAction(title: "Awesome", style: .default, handler: { _ in
-                self.navigationController?.popViewController(animated: true)
+            successAlert.addAction(UIAlertAction(title: "Back to Map", style: .default, handler: { [weak self] _ in
+                guard let self = self else { return }
+                let tabBarController = self.tabBarController
+                self.navigationController?.popToRootViewController(animated: false)
+                tabBarController?.selectedIndex = 0
             }))
+            
+            successAlert.addAction(UIAlertAction(title: "Check in My Treasures", style: .default, handler: { [weak self] _ in
+                guard let self = self else { return }
+                let tabBarController = self.tabBarController
+                self.navigationController?.popToRootViewController(animated: false)
+                tabBarController?.selectedIndex = 1
+            }))
+            
+            
             present(successAlert, animated: true, completion: nil)
             
         } else {
@@ -223,7 +248,20 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
             present(errorAlert, animated: true, completion: nil)
             
         }
+        
+        
+    }
     
+    @IBAction func btnNavigateClicked(_ sender: UIButton) {
+        guard let treasure = treasure else { return }
+        
+        let coordinate = CLLocationCoordinate2D(latitude: treasure.latitude, longitude: treasure.longitude)
+        
+        let placemark = MKPlacemark(coordinate: coordinate)
+        let mapItem = MKMapItem(placemark: placemark)
+        mapItem.name = treasure.title
+        
+        mapItem.openInMaps()
         
     }
     
@@ -231,4 +269,5 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
         textField.resignFirstResponder()
         return true
     }
+    
 }

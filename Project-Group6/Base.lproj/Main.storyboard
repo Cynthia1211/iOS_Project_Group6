@@ -514,6 +514,16 @@
                                     <action selector="btnScanClicked:" destination="6OI-XB-XPV" eventType="touchUpInside" id="KBs-KM-Llo"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m0s-7u-acP">
+                                <rect key="frame" x="271.66666666666669" y="224" width="111.33333333333331" height="34.333333333333314"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="paperplane.fill" catalog="system" title="Navigate">
+                                    <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="btnNavigateClicked:" destination="6OI-XB-XPV" eventType="touchUpInside" id="sTQ-M1-YzI"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="b3Y-7d-z9o"/>
                         <color key="backgroundColor" red="0.96439450979999997" green="0.94959145779999998" blue="0.90979820489999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -525,12 +535,14 @@
                             <constraint firstItem="kgO-Yz-hfA" firstAttribute="leading" secondItem="Rx3-Wz-ZEM" secondAttribute="trailing" constant="10" id="GVH-Ec-oMQ"/>
                             <constraint firstItem="XfS-vY-75C" firstAttribute="top" secondItem="yP4-jy-H3k" secondAttribute="bottom" constant="20" id="H6F-Sv-Zde"/>
                             <constraint firstItem="Rx3-Wz-ZEM" firstAttribute="leading" secondItem="b3Y-7d-z9o" secondAttribute="leading" constant="25" id="HJh-Td-06w"/>
+                            <constraint firstItem="b3Y-7d-z9o" firstAttribute="trailing" secondItem="m0s-7u-acP" secondAttribute="trailing" constant="25" id="IJr-3S-GNB"/>
                             <constraint firstItem="Xg5-Ny-cBF" firstAttribute="leading" secondItem="b3Y-7d-z9o" secondAttribute="leading" constant="25" id="QDY-J1-yv2"/>
                             <constraint firstItem="b3Y-7d-z9o" firstAttribute="trailing" secondItem="yP4-jy-H3k" secondAttribute="trailing" constant="25" id="S82-tl-W8b"/>
                             <constraint firstItem="azH-02-pxg" firstAttribute="leading" secondItem="b3Y-7d-z9o" secondAttribute="leading" constant="20" id="WZs-U6-fEd"/>
                             <constraint firstItem="b3Y-7d-z9o" firstAttribute="trailing" secondItem="azH-02-pxg" secondAttribute="trailing" constant="20" id="YHq-ti-thJ"/>
                             <constraint firstItem="Xg5-Ny-cBF" firstAttribute="top" secondItem="XfS-vY-75C" secondAttribute="bottom" constant="8" id="a3y-f6-HMn"/>
                             <constraint firstAttribute="trailing" secondItem="DBG-lO-bNQ" secondAttribute="trailing" constant="10" id="cKa-r4-bqZ"/>
+                            <constraint firstItem="m0s-7u-acP" firstAttribute="top" secondItem="azH-02-pxg" secondAttribute="bottom" constant="-40" id="cQM-CL-EXF"/>
                             <constraint firstItem="XfS-vY-75C" firstAttribute="leading" secondItem="b3Y-7d-z9o" secondAttribute="leading" constant="25" id="ehO-Ri-p8O"/>
                             <constraint firstItem="DBG-lO-bNQ" firstAttribute="leading" secondItem="b3Y-7d-z9o" secondAttribute="leading" constant="10" id="kXQ-WU-Nqe"/>
                             <constraint firstItem="eNX-sG-FJR" firstAttribute="leading" secondItem="XfS-vY-75C" secondAttribute="trailing" constant="2" id="mvJ-Uc-tM2"/>
@@ -685,6 +697,7 @@
         <image name="map" catalog="system" width="128" height="112"/>
         <image name="mapBkp0" width="572" height="1024"/>
         <image name="mappin" catalog="system" width="106" height="128"/>
+        <image name="paperplane.fill" catalog="system" width="128" height="119"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="treasure" width="864" height="1821"/>
         <image name="treasureDetail" width="885" height="688"/>
