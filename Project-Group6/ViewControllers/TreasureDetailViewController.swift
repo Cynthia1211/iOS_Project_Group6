@@ -146,7 +146,7 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
             
             TreasureManager.shared.printRealDatabaseStatus(for: treasure.id, userUUID: userUUID)
             
-            showConfettiImageEffect()
+            showCongratulationEffect()
             
             let successAlert = UIAlertController(
                 title: "Congratulations! 🎉",
@@ -269,7 +269,7 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
     }
     
     
-    private func showConfettiImageEffect() {
+    private func showCongratulationEffect() {
         
         guard let confettiImage = UIImage(named: "congratulation") else { return }
         
@@ -277,7 +277,6 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
         let screenHeight = view.bounds.height
         let imageRatio = confettiImage.size.height / confettiImage.size.width
         let imageHeight = screenWidth * imageRatio
-        
         
         let confettiImageView = UIImageView(image: confettiImage)
         confettiImageView.contentMode = .scaleAspectFit
@@ -287,20 +286,17 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
         
         view.addSubview(confettiImageView)
         
-        UIView.animate(
-            withDuration: 2.8,
-            delay: 0,
-            options: [.curveEaseInOut],
+        let targetY = (screenHeight - imageHeight) / 2.0
+        
+        UIView.animate( withDuration: 4.0, delay: 0,
             animations: {
-
-                confettiImageView.frame.origin.y = screenHeight
+                confettiImageView.frame.origin.y = targetY
+                confettiImageView.alpha = 0.0
             },
             completion: { _ in
-
                 confettiImageView.removeFromSuperview()
             }
         )
-        
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
