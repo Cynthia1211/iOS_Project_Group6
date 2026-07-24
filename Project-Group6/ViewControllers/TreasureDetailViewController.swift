@@ -108,18 +108,6 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
         
         guard let treasure = treasure else { return }
         
-        if !isUserNearTreasure() {
-            let distanceAlert = UIAlertController(
-                title: "Too Far Away",
-                message: "You are too far from the treasure. Get closer!",
-                preferredStyle: .alert
-            )
-            distanceAlert.addAction(UIAlertAction(title: "OK", style: .default))
-            present(distanceAlert, animated: true)
-            return
-            
-        }
-        
         let userUUID = currentUser.uid
         
         guard let inputCode = txtTreasureCode.text, !inputCode.isEmpty else {
@@ -130,6 +118,18 @@ class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataS
         }
         
         if inputCode.trimmingCharacters(in: .whitespacesAndNewlines) == treasure.validationCode {
+            
+            if !isUserNearTreasure() {
+                let distanceAlert = UIAlertController(
+                    title: "Too Far Away",
+                    message: "You are too far from the treasure. Get closer!",
+                    preferredStyle: .alert
+                )
+                distanceAlert.addAction(UIAlertAction(title: "OK", style: .default))
+                present(distanceAlert, animated: true)
+                return
+                
+            }
             
             let scoreUpdated = TreasureManager.shared.updateUserScore(userUUID: userUUID, additionalPoints: treasure.points)
             
