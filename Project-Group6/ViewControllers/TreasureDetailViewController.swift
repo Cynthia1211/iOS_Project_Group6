@@ -10,6 +10,7 @@ import MapKit
 import CoreLocation
 import FirebaseAuth // To get user's uuid
 import VisionKit // To enable scan function
+internal import Vision
 
 class TreasureDetailViewController: UIViewController, UITextFieldDelegate, DataScannerViewControllerDelegate, CLLocationManagerDelegate {
     
