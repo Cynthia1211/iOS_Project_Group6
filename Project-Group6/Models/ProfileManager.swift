@@ -19,8 +19,6 @@ import SQLite3
  */
 class ProfileManager {
     
-    
-    // Accesses the shared AppDelegate where SQLite data is stored.
     private let mainDelegate = UIApplication.shared.delegate as! AppDelegate
     
     private var databasePath: String? {
@@ -31,17 +29,6 @@ class ProfileManager {
         return nil
     }
     
-    
-    /**
-     Retrieves the current user's profile information.
-     
-     This method reads data from SQLite and returns the latest
-     saved user information.
-     
-     - Returns:
-       A PeopleData object containing username, date of birth,
-       and email. Returns nil if no user exists.
-     */
     func getUser(username: String) -> PeopleData? {
         return mainDelegate.people.first {
             $0.username == username
