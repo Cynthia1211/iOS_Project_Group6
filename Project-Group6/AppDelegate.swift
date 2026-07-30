@@ -128,6 +128,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
             sqlite3_close(db)
+            readDataFromDatabase()
 
         } else {
 
