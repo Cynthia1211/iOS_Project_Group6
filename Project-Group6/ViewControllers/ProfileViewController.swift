@@ -2,20 +2,12 @@
 //  ProfileController.swift
 //  Project_Group6
 //
-//  Created by 
+//  Created by Sophie School on 2026-07-30.
 //
 
 import UIKit
 import WebKit
 
-/**
- Principal Author: Cena Nguyen
- 
- Description:
- This view controller displays the current user's profile information.
- It retrieves stored user data and presents the username, email,
- and date of birth on the profile screen.
- */
 class ProfileViewController:
     UIViewController, WKNavigationDelegate {
     
@@ -65,10 +57,14 @@ class ProfileViewController:
             present(alert, animated: true)
         }
 
-        guard !newUsername.isEmpty, !newEmail.isEmpty else {
-            return
+        // if info entered is empty
+        if newUsername.isEmpty || !newEmail.isEmpty {
+            let alert = UIAlertController(title: "Error", message: "Input cannot be empty", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .cancel))
+            present(alert, animated: true)
         }
 
+        // validate username does not already exist
         guard validateUsername(username: newUsername) else {
             return
         }
@@ -78,12 +74,10 @@ class ProfileViewController:
             message: "Are you sure you want to update your username and email?",
             preferredStyle: .alert
         )
-
         alert.addAction(UIAlertAction(
             title: "Cancel",
             style: .cancel
         ))
-
         alert.addAction(UIAlertAction(
             title: "Update",
             style: .default
@@ -99,12 +93,10 @@ class ProfileViewController:
                 self.mainDelegate.currentUsername = newUsername
                 self.mainDelegate.currentEmail = newEmail
 
-                // Reload the people array from SQLite
                 self.mainDelegate.readDataFromDatabase()
 
                 print("Current user updated to \(newUsername)")
                 
-                // Reload profile
                 self.loadProfile()
             }
         })
@@ -123,13 +115,6 @@ class ProfileViewController:
         }
     }
     
-    /**
-     Loads the user's profile information when the screen appears.
-     
-     The information is retrieved from AppDelegate because the user
-     has already created an account and their information is temporarily
-     stored for profile display.
-     */
     override func viewDidLoad() {
         super.viewDidLoad()
         loadProfile()
