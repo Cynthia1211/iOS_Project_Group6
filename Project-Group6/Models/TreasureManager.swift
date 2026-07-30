@@ -16,6 +16,8 @@ class TreasureManager {
     // Shared instance for database access
     static let shared = TreasureManager()
     
+    let mainDelegate = UIApplication.shared.delegate as! AppDelegate
+    
     // Helper to get the local database file path from AppDelegate
     private var databasePath: String? {
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
@@ -142,6 +144,7 @@ class TreasureManager {
             }
             sqlite3_close(db)
         }
+        self.mainDelegate.readDataFromDatabase()
         return success
     }
     
