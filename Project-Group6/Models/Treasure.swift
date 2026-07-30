@@ -7,19 +7,21 @@
 
 import Foundation
 
-// Define Treasure Class
+// Author: Yue Zhang
+// Description: Defines the Treasure class to wrap treasure database records into Treasure objects.
 class Treasure {
-    var id: String
-    var title: String
-    var treasureMessage: String
-    var latitude: Double
-    var longitude: Double
-    var validationCode: String
-    var points: Int
-    var isTreasureFound: Bool
-    var treasurePlaceBy: String // UUID
-    var treasureFoundby: String // UUID
+    var id: String // Unique ID of the treasure
+    var title: String // Title of the treasure
+    var treasureMessage: String // Message or hint for finding the treasure
+    var latitude: Double // Latitude coordinate of the treasure location
+    var longitude: Double // Longitude coordinate of the treasure location
+    var validationCode: String // Code used to verify and claim the treasure
+    var points: Int // Reward points given when found
+    var isTreasureFound: Bool // True if the treasure has been found
+    var treasurePlaceBy: String // UUID of the person who hid the treasure
+    var treasureFoundby: String // UUID of the person who found the treasure
     
+    // Initializes a new Treasure object with default values.
     init(id: String = UUID().uuidString, title: String, treasureMessage: String = "",
             latitude: Double, longitude: Double, validationCode: String, points: Int = 100,
             isTreasureFound: Bool = false, treasurePlaceBy: String, treasureFoundby: String = "") {
