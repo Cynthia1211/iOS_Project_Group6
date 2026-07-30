@@ -10,6 +10,7 @@ import MapKit
 import CoreLocation
 import FirebaseAuth // To get user's uuid
 import VisionKit // To enable scan function
+internal import Vision
 
 // Author: Yue Zhang
 // Description: View controller for inspecting a treasure, scanning codes, validating distance, and claiming reward points.

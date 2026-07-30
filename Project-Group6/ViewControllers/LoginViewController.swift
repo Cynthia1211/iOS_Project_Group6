@@ -16,6 +16,7 @@ import FirebaseAuth
  and navigates successful users to the game screen.
  */
 class LoginViewController: UIViewController {
+    let mainDelegate = UIApplication.shared.delegate as! AppDelegate
     // Stores the current state of the password visibility icon.
     // This can be used to track whether the password is currently hidden or visible.
     var iconClick = false
@@ -35,24 +36,67 @@ class LoginViewController: UIViewController {
          - Parameter sender: The button that triggered this action.
          */
     @IBAction func submitPressed(_ sender: UIButton) {
-        
+
         guard let email = emailTextField.text,
               let pass = passwordTextField.text else {
             return
         }
-        // Firebase authentication is used here to prevent storing user passwords
-        // locally and to allow secure login verification.
-        Auth.auth().signIn(withEmail: email, password: pass, completion: { (user, error) in
-            if let u = user{
-                // The user is redirected only after successful authentication
-                // to prevent unauthorized access to the game screen.
-                self.performSegue(withIdentifier: "goToGame", sender: self)
+
+        Auth.auth().signIn(withEmail: email, password: pass) { authResult, error in
+
+            if let error = error {
+                let alert = UIAlertController(
+                    title: "Login Failed",
+                    message: error.localizedDescription,
+                    preferredStyle: .alert
+                )
+
+                alert.addAction(
+                    UIAlertAction(title: "OK", style: .default)
+                )
+
+                self.present(alert, animated: true)
+                return
             }
-            else{
-                // Login failure is ignored currently.
-                // Error handling can be added here to inform users about invalid
-            }})
+
+            guard let authenticatedEmail = authResult?.user.email else {
+                return
+            }
+
+            if let currentPerson = self.mainDelegate.people.first(where: {
+                $0.email?.lowercased() == authenticatedEmail.lowercased()
+            }) {
+
+                self.mainDelegate.currentUsername =
+                    currentPerson.username ?? ""
+
+                self.mainDelegate.currentEmail =
+                    currentPerson.email ?? ""
+
+                self.mainDelegate.currentDateOfBirth =
+                    currentPerson.dateofBirth ?? ""
+
+                self.performSegue(
+                    withIdentifier: "goToGame",
+                    sender: self
+                )
+
+            } else {
+                let alert = UIAlertController(
+                    title: "Profile Not Found",
+                    message: "Login succeeded, but no matching user was found in the local database.",
+                    preferredStyle: .alert
+                )
+
+                alert.addAction(
+                    UIAlertAction(title: "OK", style: .default)
+                )
+
+                self.present(alert, animated: true)
+            }
+        }
     }
+    
     /**
          Dismisses the keyboard when the user taps outside a text field.
          
