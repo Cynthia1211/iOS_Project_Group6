@@ -44,6 +44,15 @@ class LeaderboardViewController: UIViewController, UITableViewDataSource, UITabl
         tableView.reloadData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        mainDelegate.readDataFromDatabase()
+        rankedPeople = mainDelegate.people.compactMap { $0 }
+            .sorted { ($0.score ?? 0) > ($1.score ?? 0) }
+        tableView.reloadData()
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return rankedPeople.count
     }
