@@ -287,7 +287,7 @@ class TreasureManager {
     }
     
     
-//    Temp use to show db details
+//    Temp use to print db details
 //    func printRealDatabaseStatus(for treasureId: String, userUUID: String) {
 //        var db: OpaquePointer? = nil
 //        guard let path = databasePath else { return }
