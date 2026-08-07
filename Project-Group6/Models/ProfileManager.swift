@@ -37,8 +37,7 @@ class ProfileManager {
     
     func updateUserInfo(
         currentUsername: String,
-        newUsername: String,
-        newEmail: String
+        newUsername: String
     ) -> Bool {
 
         var db: OpaquePointer?
@@ -56,7 +55,7 @@ class ProfileManager {
 
         let queryStatement = """
         UPDATE entries
-        SET Username = ?, Email = ?
+        SET Username = ?
         WHERE Username = ?
         """
 
@@ -84,14 +83,6 @@ class ProfileManager {
         sqlite3_bind_text(
             updateStatement,
             2,
-            (newEmail as NSString).utf8String,
-            -1,
-            nil
-        )
-
-        sqlite3_bind_text(
-            updateStatement,
-            3,
             (currentUsername as NSString).utf8String,
             -1,
             nil
@@ -116,7 +107,7 @@ class ProfileManager {
             return false
         }
 
-        print("User information updated successfully.")
+        print("Username updated successfully.")
         return true
     }
     

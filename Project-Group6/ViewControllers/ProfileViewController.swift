@@ -16,7 +16,6 @@ class ProfileViewController:
     
     @IBOutlet var lblDOB: UILabel!
     @IBOutlet var tfUsername: UITextField!
-    @IBOutlet var tfEmail: UITextField!
     
     @IBOutlet var webView: WKWebView!
     @IBOutlet var activity: UIActivityIndicatorView!
@@ -48,20 +47,21 @@ class ProfileViewController:
     @IBAction func updateInfo(_ sender: UIButton) {
 
         let newUsername = tfUsername.text ?? ""
-        let newEmail = tfEmail.text ?? ""
         
         // if user did not update their info
-        if newUsername == mainDelegate.currentUsername && newEmail == mainDelegate.currentEmail {
+        if newUsername == mainDelegate.currentUsername {
             let alert = UIAlertController(title: "Error", message: "Please enter your updated info", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .cancel))
             present(alert, animated: true)
+            return
         }
 
         // if info entered is empty
-        if newUsername.isEmpty || !newEmail.isEmpty {
+        if newUsername.isEmpty {
             let alert = UIAlertController(title: "Error", message: "Input cannot be empty", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .cancel))
             present(alert, animated: true)
+            return
         }
 
         // validate username does not already exist
@@ -70,8 +70,8 @@ class ProfileViewController:
         }
 
         let alert = UIAlertController(
-            title: "Update Information",
-            message: "Are you sure you want to update your username and email?",
+            title: "Update Username",
+            message: "Are you sure you want to update your username?",
             preferredStyle: .alert
         )
         alert.addAction(UIAlertAction(
@@ -85,13 +85,11 @@ class ProfileViewController:
 
             let wasUpdated = self.profileManager.updateUserInfo(
                 currentUsername: self.mainDelegate.currentUsername,
-                newUsername: newUsername,
-                newEmail: newEmail
+                newUsername: newUsername
             )
 
             if wasUpdated {
                 self.mainDelegate.currentUsername = newUsername
-                self.mainDelegate.currentEmail = newEmail
 
                 self.mainDelegate.readDataFromDatabase()
 
@@ -108,9 +106,6 @@ class ProfileViewController:
         if let currentUser = profileManager.getUser(username: mainDelegate.currentUsername) {
 
             tfUsername.text = currentUser.username
-            tfEmail.text = currentUser.email
-            tfUsername.placeholder = currentUser.username
-            tfEmail.placeholder = currentUser.email
             lblDOB.text = currentUser.dateofBirth
         }
     }

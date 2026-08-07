@@ -242,9 +242,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let cuuid = sqlite3_column_text(queryStatement,4)
                     let cscore = sqlite3_column_int(queryStatement,5)
                     
-                    let username = String(cString: cusername!)
-                    let dateofBirth = String(cString: cdateofBirth!)
-                    let email = String(cString: cemail!)
+                    let username = cusername != nil ? String(cString: cusername!) : ""
+                    let dateofBirth = cdateofBirth != nil ? String(cString: cdateofBirth!) : ""
+                    let email = cemail != nil ? String(cString: cemail!) : ""
                     let uuid = cuuid != nil ? String(cString: cuuid!) : ""
                     let score = Int(CInt(cscore))
                     
@@ -282,4 +282,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 }
-
