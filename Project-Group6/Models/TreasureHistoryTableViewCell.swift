@@ -7,20 +7,17 @@
 
 import UIKit
 
+// Displays one treasure row on the My Treasures screen.
 class TreasureHistoryTableViewCell: UITableViewCell {
 
-    @IBOutlet var lblTitle: UILabel!
-    @IBOutlet var lblStatus: UILabel!
+    @IBOutlet var lblTitle: UILabel!   // Treasure title
+    @IBOutlet var lblStatus: UILabel!  // Points and found status
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
-
 }
