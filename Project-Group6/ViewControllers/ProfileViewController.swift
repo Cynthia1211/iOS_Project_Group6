@@ -8,6 +8,7 @@
 import UIKit
 import WebKit
 
+// Manages profile information and displays the Geocaching website.
 class ProfileViewController:
     UIViewController, WKNavigationDelegate {
     
@@ -20,16 +21,20 @@ class ProfileViewController:
     @IBOutlet var webView: WKWebView!
     @IBOutlet var activity: UIActivityIndicatorView!
     
+    // Displays the activity indicator when the web page begins loading.
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         activity.isHidden = false
         activity.startAnimating()
     }
     
+    // Hides the activity indicator after the web page finishes loading.
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         activity.isHidden = true
         activity.stopAnimating()
     }
     
+    // Verifies that the selected username is not already in use.
+    // Returns true when the username is available; otherwise, false.
     func validateUsername(username: String) -> Bool {
         
         let foundUser = profileManager.getUser(username: username)
@@ -44,8 +49,10 @@ class ProfileViewController:
         return true
     }
     
+    // Validates and saves the user's updated username.
     @IBAction func updateInfo(_ sender: UIButton) {
 
+        // Retrieve the updated username from the user interface.
         let newUsername = tfUsername.text ?? ""
         
         // if user did not update their info
@@ -89,6 +96,7 @@ class ProfileViewController:
             )
 
             if wasUpdated {
+                // Synchronize the application's current user with the database.
                 self.mainDelegate.currentUsername = newUsername
 
                 self.mainDelegate.readDataFromDatabase()
@@ -102,6 +110,7 @@ class ProfileViewController:
         present(alert, animated: true)
     }
     
+    // Loads the current user's profile information into the interface.
     private func loadProfile() {
         if let currentUser = profileManager.getUser(username: mainDelegate.currentUsername) {
 
@@ -110,6 +119,7 @@ class ProfileViewController:
         }
     }
     
+    // Loads the profile data and configures the embedded web view.
     override func viewDidLoad() {
         super.viewDidLoad()
         loadProfile()

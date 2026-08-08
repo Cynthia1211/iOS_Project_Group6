@@ -9,14 +9,8 @@ import Foundation
 import UIKit
 import SQLite3
 
-/**
- Principal Author: Cena Nguyen
 
- Description:
- This class manages retrieving and storing user profile information.
- It separates profile data logic from ProfileViewController
- to keep the view controller responsible only for UI updates.
- */
+// This class retrieves user information and updates usernames in the SQLite database.
 class ProfileManager {
     
     private let mainDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -29,12 +23,19 @@ class ProfileManager {
         return nil
     }
     
+    // Finds a user in the application's stored profile data.
+    // Parameter username: The username used to identify the user.
+    // Returns: The matching user, or nil if no user is found.
     func getUser(username: String) -> PeopleData? {
         return mainDelegate.people.first {
             $0.username == username
         }
     }
     
+    // Updates a user's username in the SQLite database.
+    // currentUsername is the username currently stored in the database.
+    // newUsername is the new username that will replace it.
+    // Returns true if a database row was updated; otherwise, false.
     func updateUserInfo(
         currentUsername: String,
         newUsername: String
@@ -53,6 +54,7 @@ class ProfileManager {
             return false
         }
 
+        // Update only the username while preserving all other profile data.
         let queryStatement = """
         UPDATE entries
         SET Username = ?
