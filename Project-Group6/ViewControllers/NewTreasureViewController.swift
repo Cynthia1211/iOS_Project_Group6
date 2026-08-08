@@ -7,11 +7,31 @@
 
 import UIKit
 import MapKit
+import CoreLocation
 
-// Lets the user tap a location on the map and place a new treasure there.
-class NewTreasureViewController: UIViewController {
+// Author: Alexander Tumanan
+// Description: Lets the user tap a location on the map and place a new
+// treasure there.
+class NewTreasureViewController: UIViewController, CLLocationManagerDelegate {
 
     let mainDelegate = UIApplication.shared.delegate as! AppDelegate
+
+    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var lblX: UILabel!  // Displays the selected latitude
+    @IBOutlet weak var lblY: UILabel!  // Displays the selected longitude
+    @IBOutlet weak var descriptionField: UITextField!
+    @IBOutlet weak var messageField: UITextField!
+    @IBOutlet weak var zoomSlider: UISlider!  // Controls how zoomed in the map is
+
+    // The coordinate the user selected on the map. Nil until they tap.
+    var selectedCoordinate: CLLocationCoordinate2D?
+
+    // Location manager instance to get device GPS updates
+    let locationManager = CLLocationManager()
+
+    // The device's current location, once found. The map centers on
+    // this until the user taps a different spot.
+    var currentUserCoordinate: CLLocationCoordinate2D?
 
     // Looks up the UUID of the currently logged-in user by matching
     // their email against the people array.
@@ -20,15 +40,6 @@ class NewTreasureViewController: UIViewController {
             .first(where: { $0.email?.lowercased() == mainDelegate.currentEmail.lowercased() })?
             .uuid ?? ""
     }
-
-    @IBOutlet var mapView: MKMapView!
-    @IBOutlet var lblX: UILabel!  // Displays the selected latitude
-    @IBOutlet var lblY: UILabel!  // Displays the selected longitude
-    @IBOutlet var descriptionField: UITextField!
-    @IBOutlet var messageField: UITextField!
-
-    // The coordinate the user selected on the map. Nil until they tap.
-    var selectedCoordinate: CLLocationCoordinate2D?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +50,62 @@ class NewTreasureViewController: UIViewController {
 
         lblX.text = "X: "
         lblY.text = "Y: "
+
+        // Start at a moderate zoom level regardless of the slider's
+        // default value in the storyboard.
+        zoomSlider.value = 1.0
+
+        // Shows the blue dot for the device's location on the map.
+        mapView.showsUserLocation = true
+
+        // Configure location manager settings and request GPS permissions
+        setupLocationManager()
+    }
+
+    // Setup and start location service updates
+    private func setupLocationManager() {
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+    }
+
+    // Delegate method called whenever user location is updated
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last {
+            // Only need the initial fix to center the map, so ignore
+            // further updates once we already have a coordinate.
+            if currentUserCoordinate == nil {
+                currentUserCoordinate = location.coordinate
+                updateMapZoom()
+                locationManager.stopUpdatingLocation()
+            }
+        }
+    }
+
+    // Delegate method called when location updates fail
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Location Error: \(error.localizedDescription)")
+    }
+
+    // Called when the zoom slider moves. Smaller values zoom in closer,
+    // larger values zoom out further.
+    @IBAction func zoomSliderChanged(_ sender: UISlider) {
+        updateMapZoom()
+    }
+
+    // Applies the slider's current value as the map's zoom span,
+    // centered on the device's current location (or the map's current
+    // center if the location hasn't been found yet).
+    func updateMapZoom() {
+        let center = currentUserCoordinate ?? mapView.centerCoordinate
+        let span = MKCoordinateSpan(
+            latitudeDelta: Double(zoomSlider.value),
+            longitudeDelta: Double(zoomSlider.value)
+        )
+        let region = MKCoordinateRegion(center: center, span: span)
+        mapView.setRegion(region, animated: true)
     }
 
     // Called when the user taps the map. Drops a pin at the tapped
@@ -54,8 +121,8 @@ class NewTreasureViewController: UIViewController {
         pin.coordinate = coordinate
         mapView.addAnnotation(pin)
 
-        lblX.text = String(format: "X: %.5f", coordinate.latitude)
-        lblY.text = String(format: "Y: %.5f", coordinate.longitude)
+        lblX.text = String(format: "X: %.2f", coordinate.latitude)
+        lblY.text = String(format: "Y: %.2f", coordinate.longitude)
     }
 
     // Called when the Place button is tapped. Validates the input and
